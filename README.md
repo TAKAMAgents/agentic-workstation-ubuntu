@@ -1,7 +1,7 @@
 # Agentic Workstation Ubuntu
 
-[![CI](https://github.com/hghalebi/agentic-workstation-ubuntu/actions/workflows/ci.yml/badge.svg)](https://github.com/hghalebi/agentic-workstation-ubuntu/actions/workflows/ci.yml)
-[![Security](https://github.com/hghalebi/agentic-workstation-ubuntu/actions/workflows/security.yml/badge.svg)](https://github.com/hghalebi/agentic-workstation-ubuntu/actions/workflows/security.yml)
+[![CI](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/actions/workflows/ci.yml/badge.svg)](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/actions/workflows/ci.yml)
+[![Security](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/actions/workflows/security.yml/badge.svg)](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Ubuntu](https://img.shields.io/badge/ubuntu-22.04%20%7C%2024.04-orange.svg)](tests)
 
@@ -66,7 +66,7 @@ Other Linux distributions may work for read-only planning, but Ubuntu is the sup
 Clone the repository, run the default profile, and verify the machine:
 
 ```bash
-git clone https://github.com/hghalebi/agentic-workstation-ubuntu.git
+git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
 cd agentic-workstation
 ./install-agentic-tools.sh
 ./scripts/doctor.sh --profile coding-agent
@@ -85,27 +85,27 @@ nix --extra-experimental-features 'nix-command flakes' run .#e2e
 On a fresh machine without Git installed yet, bootstrap from a GitHub archive:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
 ```
 
 Choose a profile without cloning first:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
   | bash -s -- --profile minimal
 ```
 
 Keep a local copy of the repo scripts without Git:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
   | bash -s -- --dir "$HOME/agentic-workstation"
 ```
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/hghalebi/agentic-workstation-ubuntu.git
+git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
 cd agentic-workstation
 ```
 
@@ -126,7 +126,7 @@ sudo ./install-agentic-tools.sh
 Use Nix when you want a reproducible build or validation environment for the repository itself:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 ```
 
 The Nix bootstrapper installs Nix with apt when it is missing, clones the repo into `$HOME/agentic-workstation`, builds the CLI, runs `nix run .#check`, and realizes the development shell packages with `nix develop --command true`.
@@ -161,7 +161,7 @@ nix --extra-experimental-features 'nix-command flakes' develop .#security
 
 The flake exposes `.#plan`, `.#doctor`, `.#bootstrap-nix`, `.#check`, `.#e2e`, and `.#docker-smoke` apps. See [docs/nix.md](docs/nix.md) for how Nix changes terminal usage, reproducible development, package availability, and OpenClaw workflows.
 
-Nix currently builds and validates the repository CLI and check tooling. Use `./install-agentic-tools.sh` for privileged Ubuntu workstation setup, shell configuration, manifests, and optional workspace hydration. NixOS hosts should use the separate [Agentic Workstation NixOS](https://github.com/hghalebi/agentic-workstation-nixos) edition.
+Nix currently builds and validates the repository CLI and check tooling. Use `./install-agentic-tools.sh` for privileged Ubuntu workstation setup, shell configuration, manifests, and optional workspace hydration. NixOS hosts should use the separate [Agentic Workstation NixOS](https://github.com/TAKAMAgents/agentic-workstation-nixos) edition.
 
 ## Options
 

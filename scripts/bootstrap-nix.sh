@@ -13,7 +13,7 @@ Usage:
   scripts/bootstrap-nix.sh [--skip-check] [--skip-develop]
 
 One-line install:
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 
 Options:
   --dir PATH       Checkout directory. Default: $HOME/agentic-workstation
@@ -57,7 +57,7 @@ run_sudo() {
 
 TARGET_DIR="${AGENTIC_WORKSTATION_DIR:-${HOME}/agentic-workstation}"
 REF="${AGENTIC_BOOTSTRAP_REF:-main}"
-REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/hghalebi/agentic-workstation-ubuntu.git}"
+REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git}"
 RUN_CHECK=1
 REALIZE_DEVELOP=1
 

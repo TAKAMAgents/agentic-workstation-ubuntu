@@ -23,9 +23,9 @@ Options:
   --no-doctor        Pass --no-doctor to the installer
 
 No-git install examples:
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
-  wget -qO- https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile agent-runner --ref v0.1.0
+  curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
+  wget -qO- https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile agent-runner --ref v0.1.0
 
 Any arguments after -- are passed directly to install-agentic-tools.sh.
 USAGE
@@ -46,7 +46,7 @@ have() {
 
 PROFILE="${PROFILE:-coding-agent}"
 REF="${AGENTIC_BOOTSTRAP_REF:-main}"
-REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/hghalebi/agentic-workstation-ubuntu.git}"
+REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git}"
 ARCHIVE_URL="${AGENTIC_WORKSTATION_ARCHIVE_URL:-}"
 TARGET_DIR="${AGENTIC_WORKSTATION_DIR:-}"
 REUSE_EXISTING="${AGENTIC_BOOTSTRAP_REUSE_EXISTING:-0}"

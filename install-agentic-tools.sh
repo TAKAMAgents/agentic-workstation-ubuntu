@@ -110,7 +110,7 @@ error: the mutating Bash installer supports Ubuntu only.
 
 This host is not Ubuntu. On NixOS, use the separate NixOS edition:
 
-  https://github.com/hghalebi/agentic-workstation-nixos
+  https://github.com/TAKAMAgents/agentic-workstation-nixos
 
 You can still inspect plans without mutating the host:
 

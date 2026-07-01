@@ -3,7 +3,7 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 AGENTIC_PROFILE="${AGENTIC_PROFILE:-coding-agent}"
-REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/hghalebi/agentic-workstation-ubuntu.git}"
+REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git}"
 TARGET_DIR="${AGENTIC_WORKSTATION_DIR:-/opt/agentic-workstation/repo}"
 
 apt-get update -y

@@ -5,7 +5,7 @@ Use Nix for reproducible repository development, validation, and CLI packaging.
 ## One-command Bootstrap
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 ```
 
 The bootstrapper installs Nix with apt when it is missing, clones the repo into `$HOME/agentic-workstation`, builds the CLI, runs `nix run .#check`, and realizes the default development shell packages.
@@ -47,7 +47,7 @@ nix --extra-experimental-features 'nix-command flakes' run .#check
 Use `nix profile add` when you want a package available in normal terminals:
 
 ```bash
-nix --extra-experimental-features 'nix-command flakes' profile add github:hghalebi/agentic-workstation-ubuntu
+nix --extra-experimental-features 'nix-command flakes' profile add github:TAKAMAgents/agentic-workstation-ubuntu
 agentic-workstation --help
 ```
 
@@ -97,7 +97,7 @@ nix --extra-experimental-features 'nix-command flakes' run .#docker-smoke
 ## Package Install
 
 ```bash
-nix --extra-experimental-features 'nix-command flakes' profile add github:hghalebi/agentic-workstation-ubuntu
+nix --extra-experimental-features 'nix-command flakes' profile add github:TAKAMAgents/agentic-workstation-ubuntu
 agentic-workstation plan --profile coding-agent --json
 ```
 

@@ -157,7 +157,7 @@ load_env_file
 SERVER_NAME="${HCLOUD_SERVER_NAME:-agentic-$(date -u +%Y%m%d-%H%M%S)}"
 PROFILE="${AGENTIC_PROFILE:-agent-runner}"
 REF="${AGENTIC_BOOTSTRAP_REF:-main}"
-REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/hghalebi/agentic-workstation-ubuntu.git}"
+REPO_URL="${AGENTIC_WORKSTATION_REPO:-https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git}"
 USER_NAME="${AGENTIC_HCLOUD_USER:-ubuntu}"
 SERVER_TYPE="${HCLOUD_SERVER_TYPE:-cx32}"
 IMAGE="${HCLOUD_IMAGE:-ubuntu-24.04}"

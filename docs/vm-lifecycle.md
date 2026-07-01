@@ -13,7 +13,7 @@ base-image profile -> provider snapshot -> profile-specific install -> workspace
 Start from a clean Ubuntu VM and install the reusable base layer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
   | bash -s -- --dir /opt/agentic-workstation --profile base-image --resume
 /opt/agentic-workstation/scripts/prepare-snapshot.sh
 ```
@@ -21,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu
 Or, when Git is already installed:
 
 ```bash
-git clone https://github.com/hghalebi/agentic-workstation-ubuntu.git
+git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
 cd agentic-workstation
 ./install-agentic-tools.sh --profile base-image --resume
 ./scripts/prepare-snapshot.sh
@@ -52,7 +52,7 @@ Render cloud-init user data for first boot:
   --user ubuntu \
   --ssh-key ~/.ssh/id_ed25519.pub \
   --profile agent-runner \
-  --repo https://github.com/hghalebi/agentic-workstation-ubuntu.git \
+  --repo https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git \
   --ref v0.1.1 \
   > cloud-init.agent-runner.yaml
 ```

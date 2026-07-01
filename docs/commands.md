@@ -5,8 +5,8 @@ The root [commands.md](../commands.md) file is the install command reference. Th
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
 ./install-agentic-tools.sh
 ./install-agentic-tools.sh --profile minimal
 ./install-agentic-tools.sh --profile factory --resume
@@ -83,7 +83,7 @@ gitleaks detect --source . --no-git --redact --verbose
 ## Nix
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 nix --extra-experimental-features 'nix-command flakes' build
 ./result/bin/agentic-workstation plan --profile coding-agent
 ./result/bin/agentic-workstation verify-lockfile

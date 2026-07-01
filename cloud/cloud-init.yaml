@@ -26,7 +26,7 @@ write_files:
       apt-get install -y git curl ca-certificates
 
       if [[ ! -d /opt/agentic-workstation/repo/.git ]]; then
-        git clone https://github.com/hghalebi/agentic-workstation-ubuntu.git /opt/agentic-workstation/repo
+        git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git /opt/agentic-workstation/repo
       fi
 
       cd /opt/agentic-workstation/repo

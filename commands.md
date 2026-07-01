@@ -7,8 +7,8 @@ Use it to audit what the installer runs, update vendor sources, or install a sub
 ## Installer Interface
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
 ./install-agentic-tools.sh --profile coding-agent
 ./install-agentic-tools.sh --profile factory --resume
 ./install-agentic-tools.sh --profile openclaw-server
@@ -45,7 +45,7 @@ apt-get install -y ca-certificates gnupg lsb-release curl wget unzip git gh jq r
 Bootstrap Nix, clone the repository, build the CLI, run checks, and download the development shell packages:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TAKAMAgents/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 ```
 
 The `runtimes` module installs Nix from Ubuntu packages:
