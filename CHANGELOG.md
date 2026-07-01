@@ -7,6 +7,13 @@
 - Promoted Nix to a first-class developer path with split flake modules, named shells, workflow apps, CI coverage, and an e2e bootstrap smoke test.
 - Added a Release Please pipeline for automated release PRs, changelog updates, version bumps, tags, and GitHub releases.
 
+## [0.3.0](https://github.com/hghalebi/agentic-workstation-ubuntu/compare/v0.2.0...v0.3.0) (2026-07-01)
+
+
+### Features
+
+* create ubuntu workstation edition ([d158104](https://github.com/hghalebi/agentic-workstation-ubuntu/commit/d158104bd1c5b3b78c2b49ea15bc8cb2273aa495))
+
 ## [0.2.0](https://github.com/hghalebi/agentic-workstation/compare/v0.1.1...v0.2.0) (2026-06-15)
 
 
