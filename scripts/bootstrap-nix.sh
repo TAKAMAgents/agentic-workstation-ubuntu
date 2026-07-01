@@ -13,7 +13,7 @@ Usage:
   scripts/bootstrap-nix.sh [--skip-check] [--skip-develop]
 
 One-line install:
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap-nix.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 
 Options:
   --dir PATH       Checkout directory. Default: $HOME/agentic-workstation

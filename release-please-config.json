@@ -3,7 +3,7 @@
   "packages": {
     ".": {
       "release-type": "rust",
-      "package-name": "agentic-workstation",
+      "package-name": "agentic-workstation-ubuntu",
       "changelog-path": "CHANGELOG.md",
       "versioning": "default",
       "bump-minor-pre-major": false,

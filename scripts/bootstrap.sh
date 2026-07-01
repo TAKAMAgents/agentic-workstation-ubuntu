@@ -23,9 +23,9 @@ Options:
   --no-doctor        Pass --no-doctor to the installer
 
 No-git install examples:
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh | bash
-  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh | bash -s -- --profile minimal
-  wget -qO- https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh | bash -s -- --profile agent-runner --ref v0.1.0
+  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile minimal
+  wget -qO- https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh | bash -s -- --profile agent-runner --ref v0.1.0
 
 Any arguments after -- are passed directly to install-agentic-tools.sh.
 USAGE

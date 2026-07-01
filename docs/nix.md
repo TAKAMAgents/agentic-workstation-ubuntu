@@ -5,7 +5,7 @@ Use Nix for reproducible repository development, validation, and CLI packaging.
 ## One-command Bootstrap
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap-nix.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap-nix.sh | bash
 ```
 
 The bootstrapper installs Nix with apt when it is missing, clones the repo into `$HOME/agentic-workstation`, builds the CLI, runs `nix run .#check`, and realizes the default development shell packages.

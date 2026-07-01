@@ -13,7 +13,7 @@ base-image profile -> provider snapshot -> profile-specific install -> workspace
 Start from a clean Ubuntu VM and install the reusable base layer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh \
+curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation-ubuntu/main/scripts/bootstrap.sh \
   | bash -s -- --dir /opt/agentic-workstation --profile base-image --resume
 /opt/agentic-workstation/scripts/prepare-snapshot.sh
 ```
