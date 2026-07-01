@@ -1,0 +1,50 @@
+repos:
+  - repo: local
+    hooks:
+      - id: bash-syntax
+        name: bash syntax
+        entry: bash -c 'bash -n install-agentic-tools.sh scripts/*.sh cloud/*.sh'
+        language: system
+        pass_filenames: false
+
+      - id: shellcheck
+        name: shellcheck
+        entry: bash -c 'shellcheck install-agentic-tools.sh scripts/*.sh cloud/*.sh'
+        language: system
+        pass_filenames: false
+
+      - id: shfmt
+        name: shfmt
+        entry: bash -c 'shfmt -i 2 -ci -d install-agentic-tools.sh scripts/*.sh cloud/*.sh'
+        language: system
+        pass_filenames: false
+
+      - id: cargo-fmt
+        name: cargo fmt
+        entry: cargo fmt --check
+        language: system
+        pass_filenames: false
+
+      - id: cargo-clippy
+        name: cargo clippy
+        entry: cargo clippy --all-targets --all-features -- -D warnings
+        language: system
+        pass_filenames: false
+
+      - id: cargo-test
+        name: cargo test
+        entry: cargo test --all-targets --all-features
+        language: system
+        pass_filenames: false
+
+      - id: bats
+        name: bats
+        entry: bats tests/unit
+        language: system
+        pass_filenames: false
+
+      - id: verify-lockfile
+        name: verify lockfile
+        entry: ./scripts/verify-lockfile.sh
+        language: system
+        pass_filenames: false

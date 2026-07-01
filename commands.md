@@ -1,0 +1,409 @@
+# Install Command Reference
+
+This page lists the commands embedded in `install-agentic-tools.sh`.
+
+Use it to audit what the installer runs, update vendor sources, or install a subset manually.
+
+## Installer Interface
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap.sh | bash -s -- --profile minimal
+./install-agentic-tools.sh --profile coding-agent
+./install-agentic-tools.sh --profile factory --resume
+./install-agentic-tools.sh --profile openclaw-server
+./scripts/install-openclaw-server.sh
+./install-agentic-tools.sh --only agents
+./install-agentic-tools.sh --skip browser
+./install-agentic-tools.sh --profile coding-agent --dry-run
+./install-agentic-tools.sh --profile coding-agent --json-plan
+WORKSPACE_REPO=git@github.com:hghalebi/project.git WORKSPACE_REF=main ./install-agentic-tools.sh --profile agent-runner
+```
+
+Health and lifecycle commands:
+
+```bash
+./scripts/doctor.sh --profile coding-agent
+./scripts/doctor.sh --profile openclaw-server
+./scripts/auth-status.sh
+./scripts/prepare-snapshot.sh
+./scripts/render-cloud-init.sh --user ubuntu --ssh-key ~/.ssh/id_ed25519.pub --profile agent-runner --ref v0.1.1
+./scripts/verify-lockfile.sh
+./scripts/audit-remote-installers.sh
+docker build -f tests/Dockerfile.ubuntu-24.04 .
+```
+
+## Ubuntu Base
+
+```bash
+apt-get update -y
+apt-get install -y ca-certificates gnupg lsb-release curl wget unzip git gh jq ripgrep fd-find fzf tmux direnv make build-essential pkg-config libssl-dev python3 python3-pip python3-venv pipx nodejs npm golang-go shellcheck sqlite3 postgresql-client redis-tools dnsutils netcat-openbsd git-lfs age tree rsync zip lsof strace ltrace ncdu bats shfmt hyperfine duf pre-commit
+```
+
+## Nix
+
+Bootstrap Nix, clone the repository, build the CLI, run checks, and download the development shell packages:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hghalebi/agentic-workstation/main/scripts/bootstrap-nix.sh | bash
+```
+
+The `runtimes` module installs Nix from Ubuntu packages:
+
+```bash
+apt-get update -y
+apt-get install -y nix-bin nix-setup-systemd
+```
+
+Use the flake to build the repository CLI:
+
+```bash
+nix --extra-experimental-features 'nix-command flakes' build
+./result/bin/agentic-workstation --help
+nix --extra-experimental-features 'nix-command flakes' run .#check
+nix --extra-experimental-features 'nix-command flakes' run .#e2e
+nix --extra-experimental-features 'nix-command flakes' develop .#coding-agent
+```
+
+## Rust
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile default
+```
+
+Source: https://www.rust-lang.org/tools/install
+
+## uv
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Source: https://docs.astral.sh/uv/getting-started/installation/
+
+## Server Base
+
+```bash
+apt-get update -y
+apt-get install -y ufw fail2ban nginx unattended-upgrades systemd-timesyncd
+install -d -m 0755 /etc/systemd/journald.conf.d
+systemctl enable --now fail2ban nginx unattended-upgrades
+ufw allow OpenSSH
+ufw allow 'Nginx Full'
+ufw --force enable
+```
+
+## Docker Engine
+
+```bash
+apt-get update -y
+apt-get install -y ca-certificates curl gnupg
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+chmod a+r /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl enable --now docker
+```
+
+Source: https://docs.docker.com/engine/install/ubuntu/
+
+## Rust Server Tools
+
+```bash
+cargo install --locked sqlx-cli --version 0.9.0 --no-default-features --features native-tls,postgres
+cargo install --locked cargo-nextest --version 0.9.137
+cargo install --locked cargo-watch --version 8.5.3
+```
+
+Sources:
+
+- https://github.com/launchbadge/sqlx
+- https://nexte.st/
+- https://github.com/watchexec/cargo-watch
+
+## OpenClaw Server Helpers
+
+```bash
+install -d -m 0750 /opt/openclaw/{app,tools,repos,otel,secrets,backups,logs}
+install -m 0644 docker-compose.yaml /opt/openclaw/otel/docker-compose.yaml
+install -m 0644 collector.yaml /opt/openclaw/otel/collector.yaml
+install -m 0640 .env.example /opt/openclaw/app/.env.example
+install -m 0640 hetzner-s3.env.example /opt/openclaw/secrets/hetzner-s3.env.example
+install -m 0755 check-hetzner-s3-bucket.sh /opt/openclaw/tools/check-hetzner-s3-bucket.sh
+install -m 0755 op-ssh-helper /opt/openclaw/tools/op-ssh-helper
+git clone https://github.com/hghalebi/dotfiles /root/.dotfiles
+```
+
+The OpenTelemetry Collector runs as a Compose service using `otel/opentelemetry-collector-contrib`. Neon support uses `postgresql-client`, `sqlx-cli`, and normal Postgres connection strings; it does not install a local Postgres server.
+
+## mise
+
+```bash
+curl -fsSL https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+```
+
+Source: https://mise.jdx.dev/installing-mise.html
+
+## aqua
+
+```bash
+curl -fsSLo aqua-installer https://raw.githubusercontent.com/aquaproj/aqua-installer/v4.0.2/aqua-installer
+echo "98b883756cdd0a6807a8c7623404bfc3bc169275ad9064dc23a6e24ad398f43d  aqua-installer" | sha256sum -c -
+chmod +x aqua-installer
+AQUA_ROOT_DIR=/opt/aquaproj-aqua ./aqua-installer
+ln -sf /opt/aquaproj-aqua/bin/aqua /usr/local/bin/aqua
+```
+
+Source: https://aquaproj.github.io/docs/products/aqua-installer/
+
+## YAML and Git Helpers
+
+```bash
+go install github.com/mikefarah/yq/v4@v4.45.4
+apt-get install -y git-delta
+```
+
+Sources:
+
+- https://github.com/mikefarah/yq
+- https://dandavison.github.io/delta/installation.html
+
+## Zellij
+
+```bash
+curl -fsSL https://github.com/zellij-org/zellij/releases/download/v0.42.2/zellij-x86_64-unknown-linux-musl.tar.gz -o zellij.tar.gz
+tar -xzf zellij.tar.gz zellij
+install -m 0755 zellij /usr/local/bin/zellij
+```
+
+Source: https://zellij.dev/documentation/installation.html
+
+## Agent and Model CLIs
+
+```bash
+npm install -g @openai/codex@0.139.0
+npm install -g @anthropic-ai/claude-code@1.0.0
+npm install -g @google/gemini-cli@0.1.12
+npm install -g @github/copilot@0.0.328
+npm install -g opencode-ai@0.5.16
+npm install -g openclaw@2026.6.6
+npm install -g codeagents@1.0.0
+uv tool install --force llm==0.26
+uv tool install --force openhands==1.2.1 --python 3.12
+uv tool install --force --python 3.12 --with pip aider-chat==0.84.0
+python3 -m pip install --user --break-system-packages --upgrade codeagents==1.0.0
+```
+
+Sources:
+
+- https://help.openai.com/en/articles/11096431
+- https://www.npmjs.com/package/@anthropic-ai/claude-code
+- https://google-gemini.github.io/gemini-cli/docs/get-started/
+- https://docs.github.com/copilot/how-tos/copilot-cli/install-copilot-cli
+- https://code-agents.oday-bakkour.com/learn/opencode/01
+- https://docs.openhands.dev/openhands/usage/cli/installation
+- https://aider.chat/docs/install.html
+- https://llm.datasette.io/
+- https://docs.openclaw.ai/install/index
+- https://pypi.org/project/codeagents/
+
+## MCP and Browser Helpers
+
+```bash
+npm install -g @modelcontextprotocol/inspector@0.16.8
+npm install -g playwright@1.52.0
+npx -y playwright install --with-deps chromium
+```
+
+Sources:
+
+- https://modelcontextprotocol.io/docs/tools
+- https://playwright.dev/docs/browsers
+
+## Factory: Task Runners
+
+```bash
+npm install -g @go-task/cli@3.44.1
+cargo install --locked just --version 1.40.0
+```
+
+Sources:
+
+- https://taskfile.dev/docs/installation
+- https://github.com/casey/just
+
+## Factory: Security and Supply Chain
+
+```bash
+uv tool install semgrep==1.122.0
+npm install -g snyk@1.1296.2
+go install github.com/zricethezav/gitleaks/v8@v8.24.3
+curl -sSfL https://get.anchore.io/syft | sh -s -- -b /usr/local/bin
+curl -sSfL https://get.anchore.io/grype | sh -s -- -b /usr/local/bin
+go install github.com/sigstore/cosign/v3/cmd/cosign@v3.0.0
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" > /etc/apt/sources.list.d/trivy.list
+apt-get update -y
+apt-get install -y trivy
+curl -fsSLo /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.14.0/hadolint-Linux-x86_64
+chmod +x /usr/local/bin/hadolint
+```
+
+Sources:
+
+- https://semgrep.dev/docs/getting-started/cli
+- https://docs.snyk.io/developer-tools/snyk-cli/install-or-update-the-snyk-cli/installing-snyk-cli-as-a-binary-using-npm
+- https://github.com/gitleaks/gitleaks
+- https://oss.anchore.com/docs/installation/
+- https://docs.sigstore.dev/cosign/system_config/installation/
+- https://trivy.dev/dev/getting-started/installation/
+- https://github.com/hadolint/hadolint
+
+## Factory: Tracing
+
+```bash
+apt-get install -y bpftrace linux-tools-common linux-tools-generic
+```
+
+## Factory: Artifacts
+
+```bash
+apt-get install -y httpie pandoc poppler-utils ffmpeg imagemagick tesseract-ocr
+```
+
+## Factory: Data and Model Helpers
+
+```bash
+uv tool install deepagents-cli==0.0.8
+uv tool install dvc==3.59.1
+curl -LsSf https://hf.co/cli/install.sh | bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Sources:
+
+- https://docs.langchain.com/oss/javascript/deepagents/cli
+- https://dvc.org/doc/install/linux
+- https://huggingface.co/docs/huggingface_hub/en/guides/cli
+- https://docs.ollama.com/linux
+
+## Google Apps Script and Workspace
+
+```bash
+npm install -g @google/clasp@3.3.0
+npm install -g @googleworkspace/cli@0.22.5
+```
+
+Sources:
+
+- https://developers.google.com/apps-script/guides/clasp
+- https://github.com/googleworkspace/cli
+
+## Google Cloud CLI
+
+```bash
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+apt-get update -y
+apt-get install -y google-cloud-cli
+```
+
+Source: https://docs.cloud.google.com/sdk/docs/install-sdk
+
+## Hetzner Cloud CLI
+
+```bash
+go install github.com/hetznercloud/cli/cmd/hcloud@v1.50.0
+ln -sf "$HOME/go/bin/hcloud" /usr/local/bin/hcloud
+```
+
+Source: https://github.com/hetznercloud/cli
+
+## Neon CLI
+
+```bash
+npm install -g neonctl@2.13.0
+```
+
+Source: https://neon.com/cli
+
+## 1Password CLI
+
+```bash
+ARCH="amd64"
+OP_VERSION="v$(curl -fsSL https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+curl -fsSLo op.zip "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_VERSION}/op_linux_${ARCH}_${OP_VERSION}.zip"
+unzip -o op.zip -d /usr/local/bin/
+groupadd -f onepassword-cli
+chgrp onepassword-cli /usr/local/bin/op
+chmod g+s /usr/local/bin/op
+rm op.zip
+```
+
+Source: https://www.1password.dev/cli/install-server
+
+## Harness CLI
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/harness/harness-cli/v2/install | sh
+```
+
+Source: https://developer.harness.io/docs/platform/automation/cli/content/versions/v1/
+
+## Optional Heavy Tools
+
+These are documented but not installed by default.
+
+### Docker
+
+```bash
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" > /etc/apt/sources.list.d/docker.list
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Source: https://docs.docker.com/engine/install/ubuntu/
+
+### Kubernetes and IaC
+
+```bash
+# kubectl: follow the current official Linux binary or apt repository instructions.
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list
+apt-get update -y
+apt-get install -y terraform
+
+curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
+chmod +x install-opentofu.sh
+./install-opentofu.sh --install-method deb
+rm -f install-opentofu.sh
+```
+
+Sources:
+
+- https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+- https://helm.sh/docs/intro/install/
+- https://developer.hashicorp.com/terraform/cli/install
+- https://opentofu.org/docs/intro/install/deb/
+
+### AWS and Azure
+
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip -o awscliv2.zip
+./aws/install --update
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+```
+
+Sources:
+
+- https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
+- https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux
