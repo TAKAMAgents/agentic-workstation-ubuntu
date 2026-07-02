@@ -1,12 +1,25 @@
 name: CI
 
 "on":
+  workflow_dispatch:
   push:
   pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   static:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - name: Install check tools
@@ -30,6 +43,7 @@ jobs:
 
   unit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - name: Install unit test tools
@@ -39,6 +53,9 @@ jobs:
 
   rust:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CARGO_TERM_COLOR: always
     steps:
       - uses: actions/checkout@v5
       - name: Install Rust components
@@ -54,6 +71,7 @@ jobs:
 
   nix:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     env:
       NIX_CONFIG: experimental-features = nix-command flakes
     steps:
@@ -80,10 +98,39 @@ jobs:
 
   docker-smoke:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
+      fail-fast: false
       matrix:
         ubuntu: ["22.04", "24.04"]
     steps:
       - uses: actions/checkout@v5
       - name: Docker static smoke
         run: docker build -f tests/Dockerfile.ubuntu-${{ matrix.ubuntu }} .
+
+  quality-gate:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - static
+      - unit
+      - rust
+      - nix
+      - docker-smoke
+    steps:
+      - name: Require all CI jobs
+        run: |
+          failed=0
+          for result in \
+            "${{ needs.static.result }}" \
+            "${{ needs.unit.result }}" \
+            "${{ needs.rust.result }}" \
+            "${{ needs.nix.result }}" \
+            "${{ needs.docker-smoke.result }}"; do
+            if [[ "$result" != "success" ]]; then
+              failed=1
+              printf 'CI dependency finished with result=%s\n' "$result" >&2
+            fi
+          done
+          exit "$failed"
