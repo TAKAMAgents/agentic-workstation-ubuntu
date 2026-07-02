@@ -50,6 +50,22 @@ setup() {
   [ "$status" -eq 0 ]
 }
 
+@test "agent vm dry run renders without hcloud cli" {
+  state_dir="${BATS_TEST_TMPDIR}/hcloud-state"
+  ssh_key="${BATS_TEST_TMPDIR}/ssh/agent_ed25519"
+
+  run env PATH="/usr/bin:/bin" AGENTIC_STATE_DIR="$state_dir" bash ./scripts/agent-vm-new.sh \
+    --dry-run \
+    --name dry-run-agent \
+    --ref v0.1.1 \
+    --ssh-key "$ssh_key"
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"cloud-init: ${state_dir}/cloud-init/dry-run-agent.yaml"* ]]
+  [[ "$output" == *"command: hcloud server create"* ]]
+  [ -f "${state_dir}/cloud-init/dry-run-agent.yaml" ]
+}
+
 @test "cloud-init renderer can inject workspace hydration" {
   run bash -c 'bash ./scripts/render-cloud-init.sh --ssh-key-value "ssh-ed25519 AAAATEST test@example" --ref v0.1.0 --workspace-repo git@github.com:org/project.git --workspace-ref main --workspace-target /workspace/project | grep -Eq "export WORKSPACE_REPO=.*git@github.com:org/project.git"'
   [ "$status" -eq 0 ]

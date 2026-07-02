@@ -323,7 +323,9 @@ if [[ "$WORKSPACE_REPO" == git@* || "$WORKSPACE_REPO" == ssh://* ]]; then
   echo "warning: SSH workspace repos need credentials on the VM; this script does not copy private keys or tokens" >&2
 fi
 
-have hcloud || die "missing hcloud; install the cloud profile first or run ./install-agentic-tools.sh --only cloud"
+if [[ "$DRY_RUN" != "1" ]]; then
+  have hcloud || die "missing hcloud; install the cloud profile first or run ./install-agentic-tools.sh --only cloud"
+fi
 have ssh-keygen || die "missing ssh-keygen"
 
 STATE_DIR="${AGENTIC_STATE_DIR:-${REPO_DIR}/state/hcloud}"
