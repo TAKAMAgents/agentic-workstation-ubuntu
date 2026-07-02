@@ -72,6 +72,27 @@ setup() {
   [[ "$output" == *"git checkout 'feature/bootstrap-ref'"* ]]
 }
 
+@test "workspace hydration supports tag refs without pull failures" {
+  source_repo="${BATS_TEST_TMPDIR}/source-repo"
+  target_repo="${BATS_TEST_TMPDIR}/target-repo"
+
+  git init -b main "$source_repo" >/dev/null
+  git -C "$source_repo" config user.name "Hamze GHALEBI"
+  git -C "$source_repo" config user.email "hghalebi@users.noreply.github.com"
+  printf 'hello\n' >"${source_repo}/README.md"
+  git -C "$source_repo" add README.md
+  git -C "$source_repo" commit -m "initial workspace" >/dev/null
+  git -C "$source_repo" tag v1.0.0
+
+  run env WORKSPACE_REPO="$source_repo" WORKSPACE_REF=v1.0.0 WORKSPACE_TARGET="$target_repo" bash ./scripts/hydrate-workspace.sh
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"$target_repo"* ]]
+  run git -C "$target_repo" describe --tags --exact-match
+  [ "$status" -eq 0 ]
+  [ "$output" = "v1.0.0" ]
+}
+
 @test "only filter enables requested module and filters others" {
   run bash -c 'bash ./install-agentic-tools.sh --profile coding-agent --only agents --json-plan | jq -e ".modules[] | select(.name == \"agents\" and .enabled == true)"'
   [ "$status" -eq 0 ]

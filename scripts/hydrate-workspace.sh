@@ -18,6 +18,11 @@ fi
 
 git -C "$workspace_target" fetch --all --prune
 git -C "$workspace_target" checkout "$workspace_ref"
-git -C "$workspace_target" pull --ff-only || true
+if git -C "$workspace_target" symbolic-ref --quiet HEAD >/dev/null &&
+  git -C "$workspace_target" rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+  git -C "$workspace_target" pull --ff-only
+else
+  echo "workspace pull skipped; checked out ref has no upstream branch" >&2
+fi
 
 echo "$workspace_target"

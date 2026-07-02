@@ -1227,7 +1227,12 @@ hydrate_workspace_repo() {
   log "Updating workspace repo to ${workspace_ref}"
   git -C "$workspace_target" fetch --all --prune
   git -C "$workspace_target" checkout "$workspace_ref"
-  git -C "$workspace_target" pull --ff-only || log "Workspace pull skipped or not fast-forwardable"
+  if git -C "$workspace_target" symbolic-ref --quiet HEAD >/dev/null &&
+    git -C "$workspace_target" rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+    git -C "$workspace_target" pull --ff-only
+  else
+    log "Workspace pull skipped; checked out ref has no upstream branch"
+  fi
 }
 
 hydrate_workspace() {
