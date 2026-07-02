@@ -390,7 +390,7 @@ docker build --build-arg RUN_INSTALL=1 --build-arg PROFILE=minimal -f tests/Dock
 | [docs/profiles.md](docs/profiles.md) | Profile behavior |
 | [docs/nix.md](docs/nix.md) | Nix bootstrap, apps, shells, and e2e workflow |
 | [docs/vm-lifecycle.md](docs/vm-lifecycle.md) | Snapshots, cloud-init, and workspace hydration |
-| [docs/hetzner-dx.md](docs/hetzner-dx.md) | Hetzner operator workflow |
+| [docs/hetzner-dx.md](docs/hetzner-dx.md) | Dev-team design notes for future Hetzner DX |
 | [docs/auth.md](docs/auth.md) | Auth commands and status checks |
 | [docs/architecture.md](docs/architecture.md) | Factory architecture |
 | [docs/threat-model.md](docs/threat-model.md) | Security model |

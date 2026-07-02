@@ -6,8 +6,8 @@ This page tracks the reliability targets for the installer, planner, and image w
 
 | Metric | Target | Current |
 | --- | --- | --- |
-| Fresh minimal install success | 100% in CI | Planned Docker install job |
-| Fresh agent-runner install success | 100% in CI | Planned Docker install job |
+| Fresh minimal install success | 100% in CI | Nightly Docker install smoke in `.github/workflows/nightly.yml` |
+| Fresh agent-runner install success | 100% in CI | Nightly Docker install smoke in `.github/workflows/nightly.yml` |
 | Heavy factory install success | Nightly tracked | Planned nightly |
 | Unpinned external installs | Trending to 0 | Installer package commands consume lockfile pins; remote scripts remain documented exceptions |
 | Remote installers documented | 100% | `docs/remote-installers.md` |
@@ -15,6 +15,7 @@ This page tracks the reliability targets for the installer, planner, and image w
 | Doctor JSON support | Yes | Implemented |
 | Typed read-only planner | Yes | Rust CLI matches Bash `--json-plan` for checked-in profiles |
 | Nix package build | Yes | `nix build`, `.#check`, named dev shells, and `.#e2e` are covered by CI |
+| CI quality gate | Yes | `quality-gate` job in `.github/workflows/ci.yml` |
 | Packer image verification | Yes | Planned |
 | OpenSSF Scorecard | Published | Workflow added |
 | First tagged release | `v0.1.0` | Released |

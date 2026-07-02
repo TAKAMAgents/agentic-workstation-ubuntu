@@ -1,12 +1,14 @@
-# Hetzner DX Design
+# Hetzner DX Design Notes
 
-This document defines the target operator experience for Hetzner-backed agent VMs.
+This is a dev-team design document for future Hetzner-backed agent VM workflows. It intentionally includes target interfaces that are not all implemented yet.
 
 The goal is a small agent factory: create a machine, hydrate a repo, run an agent, collect evidence, and delete the machine without remembering provider details.
 
 ## Status
 
-Some building blocks already exist. The `just` commands in this document are target interfaces unless a backing script is listed and present in the repository.
+The implemented operator guide is the root [README.md](../README.md). Use this document for product and DX planning, not as a copy-paste command reference.
+
+Some building blocks already exist. Target `just` commands are design proposals unless they are present in [justfile](../justfile) and their backing script exists in the repository.
 
 The current repo already has the right base pieces:
 
@@ -53,11 +55,11 @@ Use these defaults unless a command overrides them:
 | Bootstrap ref | tag or commit | Reproducible cloud-init. |
 | Secrets | never in cloud-init | Auth remains manual or reference based. |
 
-## Golden Paths
+## Target Golden Paths
 
 ### 1. First Setup
 
-One command should validate local prerequisites without creating anything:
+Target interface:
 
 ```bash
 just hcloud-doctor
@@ -76,6 +78,8 @@ It should check:
 The snapshot path should be the preferred day-to-day flow because the repo
 already treats VM startup time as a first-class concern.
 
+Target interface:
+
 ```bash
 just hcloud-image profile=base-image ref=v0.1.1
 ```
@@ -93,6 +97,8 @@ Desired behavior:
 
 The most common operation should not require remembering `hcloud` flags:
 
+Target interface:
+
 ```bash
 just agent-new name=repo-fix repo=git@github.com:org/project.git ref=main
 ```
@@ -101,6 +107,7 @@ The first implemented script for this flow is:
 
 ```bash
 HCLOUD_TOKEN=... ./scripts/agent-vm-new.sh --name repo-fix --profile agent-runner
+./scripts/agent-vm-new.sh --dry-run --name repo-fix --ref v0.1.1
 ```
 
 Desired behavior:
@@ -119,6 +126,8 @@ Desired behavior:
 
 ### 4. Connect To A VM
 
+Target interface:
+
 ```bash
 just agent-ssh name=repo-fix
 ```
@@ -131,6 +140,8 @@ Desired behavior:
   provided.
 
 ### 5. Inspect Health
+
+Target interface:
 
 ```bash
 just agent-health name=repo-fix
@@ -145,6 +156,8 @@ Desired behavior:
 
 ### 6. Collect Logs And Artifacts
 
+Target interface:
+
 ```bash
 just agent-pull name=repo-fix
 ```
@@ -158,6 +171,8 @@ Desired behavior:
 
 ### 7. Destroy A Disposable VM
 
+Target interface:
+
 ```bash
 just agent-destroy name=repo-fix
 ```
@@ -168,20 +183,20 @@ Desired behavior:
 - Require `CONFIRM=<name>` for non-interactive deletion.
 - Leave local state and pulled artifacts intact.
 
-## Command Shape
+## Target Command Shape
 
 Prefer `just` as the human DX and small scripts as the implementation:
 
-| Human command | Backing script |
-| --- | --- |
-| `just hcloud-doctor` | `scripts/hcloud-doctor.sh` |
-| `just hcloud-render name=...` | `scripts/hcloud-render.sh` |
-| `just hcloud-create name=...` | `cloud/hetzner-create-vm.sh` |
-| `just agent-new name=...` | `scripts/agent-vm-new.sh` |
-| `just agent-ssh name=...` | `scripts/agent-vm-ssh.sh` |
-| `just agent-health name=...` | `scripts/agent-vm-health.sh` |
-| `just agent-pull name=...` | `scripts/agent-vm-pull.sh` |
-| `just agent-destroy name=...` | `scripts/agent-vm-destroy.sh` |
+| Human command | Backing script | Status |
+| --- | --- | --- |
+| `just hcloud-doctor` | `scripts/hcloud-doctor.sh` | Target |
+| `just hcloud-render name=...` | `scripts/hcloud-render.sh` | Target |
+| `just hcloud-create name=...` | `cloud/hetzner-create-vm.sh` | Target wrapper |
+| `just agent-new name=...` | `scripts/agent-vm-new.sh` | Partially implemented as positional `just agent-new <name> [profile] [ref]` |
+| `just agent-ssh name=...` | `scripts/agent-vm-ssh.sh` | Target |
+| `just agent-health name=...` | `scripts/agent-vm-health.sh` | Target |
+| `just agent-pull name=...` | `scripts/agent-vm-pull.sh` | Target |
+| `just agent-destroy name=...` | `scripts/agent-vm-destroy.sh` | Target |
 
 Keep scripts boring Bash. Use OpenTofu later only for long-lived fleets, not for
 single disposable agent sessions.
@@ -225,14 +240,14 @@ Supported values:
 HCLOUD_LOCATION=fsn1
 HCLOUD_SERVER_TYPE=cx32
 HCLOUD_IMAGE=ubuntu-24.04
-HCLOUD_SSH_KEY=personal-laptop
+AGENTIC_HCLOUD_SSH_KEY_PATH=~/.ssh/agentic-workstation_ed25519
+HCLOUD_SSH_KEY_NAME=agentic-workstation-myhost
 AGENTIC_BOOTSTRAP_REF=v0.1.1
 AGENTIC_HCLOUD_USER=ubuntu
 AGENTIC_HCLOUD_LABEL_OWNER=hghalebi
 ```
 
-Scripts should load `.env.hcloud` if present, then let explicit environment
-variables override it.
+Current scripts load `.env.hcloud` if present. The target behavior is for explicit environment variables to override file defaults; update scripts before documenting that as implemented operator behavior.
 
 ## Isolation Model
 
