@@ -121,6 +121,14 @@ shell_quote() {
   printf "%s'" "$value"
 }
 
+sed_escape_replacement() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//&/\\&}"
+  value="${value//|/\\|}"
+  printf '%s' "$value"
+}
+
 workspace_exports() {
   if [[ -z "$WORKSPACE_REPO" ]]; then
     printf ''
@@ -135,13 +143,16 @@ workspace_exports() {
 }
 
 WORKSPACE_EXPORTS="$(workspace_exports)"
+PROFILE_SH="$(shell_quote "$PROFILE")"
+REPO_SH="$(shell_quote "$REPO_URL")"
+REF_SH="$(shell_quote "$REF")"
 
 sed \
-  -e "s|__USER__|${USER_NAME}|g" \
-  -e "s|__SSH_KEY__|${SSH_KEY_VALUE}|g" \
-  -e "s|__PROFILE__|${PROFILE}|g" \
-  -e "s|__REPO__|${REPO_URL}|g" \
-  -e "s|__REF__|${REF}|g" \
+  -e "s|__USER__|$(sed_escape_replacement "$USER_NAME")|g" \
+  -e "s|__SSH_KEY__|$(sed_escape_replacement "$SSH_KEY_VALUE")|g" \
+  -e "s|__PROFILE_SH__|$(sed_escape_replacement "$PROFILE_SH")|g" \
+  -e "s|__REPO_SH__|$(sed_escape_replacement "$REPO_SH")|g" \
+  -e "s|__REF_SH__|$(sed_escape_replacement "$REF_SH")|g" \
   "$TEMPLATE" |
   while IFS= read -r line || [[ -n "$line" ]]; do
     if [[ "$line" == "__WORKSPACE_EXPORTS__" ]]; then

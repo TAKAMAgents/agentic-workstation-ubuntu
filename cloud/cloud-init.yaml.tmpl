@@ -18,7 +18,7 @@ write_files:
       set -euo pipefail
 
       export DEBIAN_FRONTEND=noninteractive
-      export AGENTIC_PROFILE="__PROFILE__"
+      export AGENTIC_PROFILE=__PROFILE_SH__
       export SKIP_BROWSER_TOOLS="${SKIP_BROWSER_TOOLS:-1}"
 __WORKSPACE_EXPORTS__
 
@@ -26,12 +26,12 @@ __WORKSPACE_EXPORTS__
       apt-get install -y git curl ca-certificates
 
       if [[ ! -d /opt/agentic-workstation/repo/.git ]]; then
-        git clone __REPO__ /opt/agentic-workstation/repo
+        git clone __REPO_SH__ /opt/agentic-workstation/repo
       fi
 
       cd /opt/agentic-workstation/repo
       git fetch --all --tags --prune
-      git checkout __REF__
+      git checkout __REF_SH__
 
       ./install-agentic-tools.sh --profile "${AGENTIC_PROFILE}" --resume
 

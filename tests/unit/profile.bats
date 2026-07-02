@@ -59,6 +59,19 @@ setup() {
   [ "$status" -eq 0 ]
 }
 
+@test "cloud-init renderer shell-quotes repo profile and ref values" {
+  run bash ./scripts/render-cloud-init.sh \
+    --ssh-key-value "ssh-ed25519 AAAATEST test@example" \
+    --profile "agent-runner" \
+    --repo "https://github.com/org/repo.git?archive=a&cache=b" \
+    --ref "feature/bootstrap-ref"
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"export AGENTIC_PROFILE='agent-runner'"* ]]
+  [[ "$output" == *"git clone 'https://github.com/org/repo.git?archive=a&cache=b' /opt/agentic-workstation/repo"* ]]
+  [[ "$output" == *"git checkout 'feature/bootstrap-ref'"* ]]
+}
+
 @test "only filter enables requested module and filters others" {
   run bash -c 'bash ./install-agentic-tools.sh --profile coding-agent --only agents --json-plan | jq -e ".modules[] | select(.name == \"agents\" and .enabled == true)"'
   [ "$status" -eq 0 ]
