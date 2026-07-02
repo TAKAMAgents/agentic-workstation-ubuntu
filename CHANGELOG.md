@@ -7,6 +7,20 @@ This Ubuntu edition was split from the original combined `hghalebi/agentic-works
 - Aligned repository identity, bootstrap URLs, and release metadata with the Ubuntu edition.
 - Clarified that NixOS hosts should use `agentic-workstation-nixos`.
 
+## [0.3.0](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/compare/v0.2.0...v0.3.0) (2026-07-02)
+
+
+### Features
+
+* create ubuntu workstation edition ([d158104](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/commit/d158104bd1c5b3b78c2b49ea15bc8cb2273aa495))
+
+
+### Bug Fixes
+
+* allow vm dry run without hcloud ([7791839](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/commit/77918397c6580190d594df29de3f9d73c9d8d1a6))
+* harden workspace hydration refs ([88addd5](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/commit/88addd50f699976fab5f2cab66ab9d376a170d16))
+* quote cloud init bootstrap values ([2fcb2d7](https://github.com/TAKAMAgents/agentic-workstation-ubuntu/commit/2fcb2d73306a3817453b1206f6041e884fbef97d))
+
 ## [0.2.0](https://github.com/hghalebi/agentic-workstation/compare/v0.1.1...v0.2.0) (2026-06-15)
 
 
