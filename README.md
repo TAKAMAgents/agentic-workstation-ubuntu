@@ -67,7 +67,7 @@ Clone the repository, run the default profile, and verify the machine:
 
 ```bash
 git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
-cd agentic-workstation
+cd agentic-workstation-ubuntu
 ./install-agentic-tools.sh
 ./scripts/doctor.sh --profile coding-agent
 ```
@@ -106,7 +106,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
-cd agentic-workstation
+cd agentic-workstation-ubuntu
 ```
 
 Run the default `coding-agent` profile:

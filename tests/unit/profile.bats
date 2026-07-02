@@ -25,6 +25,26 @@ setup() {
   [ "$status" -eq 0 ]
 }
 
+@test "bootstrap can run installer from a local archive without git clone" {
+  archive_dir="${BATS_TEST_TMPDIR}/archive-source"
+  archive_file="${BATS_TEST_TMPDIR}/agentic-workstation.tar.gz"
+  target_dir="${BATS_TEST_TMPDIR}/bootstrap-target"
+
+  mkdir -p "$archive_dir"
+  cp -R install-agentic-tools.sh profiles agentic-tools.lock.yaml "$archive_dir/"
+  tar -C "$archive_dir" -czf "$archive_file" .
+
+  run bash ./scripts/bootstrap.sh \
+    --archive-url "file://${archive_file}" \
+    --dir "$target_dir" \
+    --profile minimal \
+    -- --json-plan
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *'"profile": "minimal"'* ]]
+  [ -x "${target_dir}/install-agentic-tools.sh" ]
+}
+
 @test "agent vm help works without network" {
   run bash ./scripts/agent-vm-new.sh --help
   [ "$status" -eq 0 ]

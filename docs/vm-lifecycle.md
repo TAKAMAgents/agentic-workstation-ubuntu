@@ -22,7 +22,7 @@ Or, when Git is already installed:
 
 ```bash
 git clone https://github.com/TAKAMAgents/agentic-workstation-ubuntu.git
-cd agentic-workstation
+cd agentic-workstation-ubuntu
 ./install-agentic-tools.sh --profile base-image --resume
 ./scripts/prepare-snapshot.sh
 ```
